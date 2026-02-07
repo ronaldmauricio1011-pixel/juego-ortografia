@@ -1,160 +1,154 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <title>Juego de Ortografía Pixel</title>
+<meta charset="UTF-8">
+<title>Pixel Anime – Ortografía Infinita</title>
 
-  <!-- Fuente pixel -->
-  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+<!-- Fuente pixel -->
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
 
-  <style>
-    body {
-      margin: 0;
-      font-family: 'Press Start 2P', cursive;
-      background: linear-gradient(135deg, #6a11cb, #2575fc);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-    }
+<style>
+body {
+  margin: 0;
+  font-family: 'Press Start 2P', cursive;
+  background: linear-gradient(270deg, #ff9a9e, #fad0c4, #a1c4fd, #c2e9fb);
+  background-size: 800% 800%;
+  animation: fondo 15s ease infinite;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
 
-    .game {
-      background-color: #fff;
-      border: 6px solid #000;
-      border-radius: 10px;
-      padding: 25px;
-      width: 90%;
-      max-width: 500px;
-      text-align: center;
-      box-shadow: 0 10px 0 #000;
-    }
+@keyframes fondo {
+  0% {background-position:0% 50%}
+  50% {background-position:100% 50%}
+  100% {background-position:0% 50%}
+}
 
-    h1 {
-      font-size: 16px;
-      color: #ff006e;
-      margin-bottom: 20px;
-    }
+.game {
+  background: #fff;
+  border: 6px solid #000;
+  border-radius: 12px;
+  width: 90%;
+  max-width: 520px;
+  padding: 25px;
+  text-align: center;
+  box-shadow: 0 10px 0 #000;
+}
 
-    .question {
-      font-size: 14px;
-      margin-bottom: 15px;
-    }
+h1 {
+  font-size: 14px;
+  color: #ff006e;
+  margin-bottom: 15px;
+}
 
-    button {
-      display: block;
-      width: 100%;
-      margin: 8px 0;
-      padding: 12px;
-      font-family: 'Press Start 2P', cursive;
-      font-size: 12px;
-      background-color: #ffd60a;
-      border: 3px solid #000;
-      cursor: pointer;
-    }
+.character {
+  font-size: 48px;
+  margin: 10px 0;
+}
 
-    button:hover {
-      background-color: #ffbe0b;
-    }
+.question {
+  font-size: 12px;
+  margin: 15px 0;
+}
 
-    .score {
-      margin-top: 15px;
-      font-size: 12px;
-      color: #3a86ff;
-    }
+button {
+  width: 100%;
+  margin: 6px 0;
+  padding: 12px;
+  font-family: 'Press Start 2P';
+  font-size: 11px;
+  background: #ffd166;
+  border: 3px solid #000;
+  cursor: pointer;
+}
 
-    .message {
-      margin-top: 15px;
-      font-size: 12px;
-    }
-  </style>
+button:hover {
+  background: #ffbe0b;
+}
+
+.message {
+  font-size: 11px;
+  margin-top: 10px;
+}
+
+.score {
+  margin-top: 15px;
+  font-size: 11px;
+  color: #3a86ff;
+}
+</style>
 </head>
+
 <body>
 
-  <div class="game">
-    <h1>🕹️ Ortografía Pixel</h1>
+<div class="game">
+  <h1>⭐ Ortografía Anime Pixel ⭐</h1>
 
-    <div class="question" id="question"></div>
+  <div class="character" id="character">🧙‍♂️</div>
 
-    <div id="answers"></div>
+  <div class="question" id="question"></div>
 
-    <div class="message" id="message"></div>
+  <div id="answers"></div>
 
-    <div class="score">
-      ⭐ Puntos: <span id="score">0</span>
-    </div>
+  <div class="message" id="message"></div>
+
+  <div class="score">
+    💎 Puntos: <span id="score">0</span>
   </div>
+</div>
 
-  <script>
-    const questions = [
-      {
-        q: "¿Cuál palabra está bien escrita?",
-        options: ["Aver", "Haber", "Aber"],
-        correct: "Haber"
-      },
-      {
-        q: "Elige la forma correcta:",
-        options: ["Balla", "Valla", "Baya"],
-        correct: "Valla"
-      },
-      {
-        q: "¿Cuál es correcta?",
-        options: ["Hacer", "Aser", "Haser"],
-        correct: "Hacer"
-      },
-      {
-        q: "Completa: Voy a ___ una tarea",
-        options: ["Haser", "Aser", "Hacer"],
-        correct: "Hacer"
-      }
-    ];
+<script>
+const characters = ["🧙‍♂️","🧝‍♀️","🧑‍🚀","🧑‍🎤","🦸‍♂️","🦸‍♀️"];
 
-    let current = 0;
-    let score = 0;
+const questions = [
+  { q:"¿Cuál está bien escrita?", options:["Hacer","Haser","Aser"], correct:"Hacer" },
+  { q:"Elige la correcta:", options:["Valla","Balla","Baya"], correct:"Valla" },
+  { q:"Completa: Voy a ___ pan", options:["Hornear","Ornear","Hornéar"], correct:"Hornear" },
+  { q:"¿Cuál es correcta?", options:["A ver","Haber","Aber"], correct:"A ver" },
+  { q:"Completa: ___ ido al parque", options:["He","E","Eh"], correct:"He" },
+  { q:"¿Cuál está bien?", options:["Porque","Por qué","Porqué"], correct:"Porque" }
+];
 
-    const questionEl = document.getElementById("question");
-    const answersEl = document.getElementById("answers");
-    const messageEl = document.getElementById("message");
-    const scoreEl = document.getElementById("score");
+let score = 0;
 
-    function loadQuestion() {
-      messageEl.textContent = "";
-      answersEl.innerHTML = "";
+const questionEl = document.getElementById("question");
+const answersEl = document.getElementById("answers");
+const messageEl = document.getElementById("message");
+const scoreEl = document.getElementById("score");
+const characterEl = document.getElementById("character");
 
-      const q = questions[current];
-      questionEl.textContent = q.q;
+function randomQuestion() {
+  messageEl.textContent = "";
+  answersEl.innerHTML = "";
 
-      q.options.forEach(option => {
-        const btn = document.createElement("button");
-        btn.textContent = option;
-        btn.onclick = () => checkAnswer(option);
-        answersEl.appendChild(btn);
-      });
-    }
+  const q = questions[Math.floor(Math.random() * questions.length)];
+  questionEl.textContent = q.q;
 
-    function checkAnswer(answer) {
-      if (answer === questions[current].correct) {
-        messageEl.textContent = "🎉 ¡Muy bien!";
-        score += 10;
-      } else {
-        messageEl.textContent = "❌ Intenta otra vez";
-      }
+  characterEl.textContent = characters[Math.floor(Math.random() * characters.length)];
 
-      scoreEl.textContent = score;
+  q.options.sort(() => Math.random() - 0.5).forEach(opt => {
+    const btn = document.createElement("button");
+    btn.textContent = opt;
+    btn.onclick = () => checkAnswer(opt, q.correct);
+    answersEl.appendChild(btn);
+  });
+}
 
-      current++;
-      if (current < questions.length) {
-        setTimeout(loadQuestion, 1000);
-      } else {
-        setTimeout(() => {
-          questionEl.textContent = "🏆 ¡Juego terminado!";
-          answersEl.innerHTML = "";
-          messageEl.textContent = "Puntaje final: " + score;
-        }, 1000);
-      }
-    }
+function checkAnswer(answer, correct) {
+  if (answer === correct) {
+    messageEl.textContent = "✨ ¡Genial! Sigue así";
+    score += 5;
+  } else {
+    messageEl.textContent = "❌ Casi, inténtalo otra vez";
+  }
+  scoreEl.textContent = score;
+  setTimeout(randomQuestion, 900);
+}
 
-    loadQuestion();
-  </script>
+randomQuestion();
+</script>
 
 </body>
 </html>
