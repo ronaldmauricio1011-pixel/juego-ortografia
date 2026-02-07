@@ -2,166 +2,191 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<title>Granja Pixel – Ortografía Infinita</title>
-<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+<title>Mundo Pixel de Ortografía</title>
 
 <style>
 body{
   margin:0;
-  background:linear-gradient(#87ceeb 40%,#7ec850 40%);
-  font-family:'Press Start 2P',cursive;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  height:100vh;
+  font-family: 'Verdana', sans-serif;
+  background: repeating-linear-gradient(
+    45deg,
+    #7dd56f,
+    #7dd56f 20px,
+    #6cc45e 20px,
+    #6cc45e 40px
+  );
 }
-.game{
-  background:#fefae0;
-  border:6px solid #3b2f2f;
-  border-radius:12px;
-  width:95%;
-  max-width:620px;
-  padding:20px;
-  box-shadow:0 10px 0 #3b2f2f;
-}
-.header{
-  display:flex;
-  justify-content:space-between;
-  font-size:11px;
-  color:#3b2f2f;
-}
-.scene{
-  font-size:42px;
-  text-align:center;
-  margin:15px 0;
-}
-.box{
+
+#game{
+  max-width:900px;
+  margin:20px auto;
   background:#fff;
-  border:4px solid #3b2f2f;
+  border:6px solid #2e7d32;
+  border-radius:20px;
+  padding:20px;
+  box-shadow:0 0 20px rgba(0,0,0,.4);
+}
+
+h1{
+  text-align:center;
+  color:#2e7d32;
+  font-size:32px;
+}
+
+#scene{
+  background:#e3f2fd;
+  border:4px dashed #42a5f5;
+  border-radius:15px;
   padding:15px;
-  border-radius:10px;
+  margin-bottom:15px;
+  font-size:20px;
 }
-.question{
-  font-size:11px;
-  margin-bottom:10px;
-}
+
 button{
+  display:block;
   width:100%;
-  margin:6px 0;
-  padding:10px;
-  font-family:'Press Start 2P';
-  font-size:10px;
-  background:#f4d35e;
-  border:3px solid #3b2f2f;
+  padding:12px;
+  margin:8px 0;
+  font-size:18px;
+  background:#ffd54f;
+  border:none;
+  border-radius:12px;
   cursor:pointer;
 }
+
 button:hover{
-  background:#ffd60a;
+  background:#ffca28;
 }
-.msg{
-  margin-top:10px;
-  font-size:10px;
-}
+
 input{
   width:100%;
   padding:10px;
-  font-family:'Press Start 2P';
-  font-size:10px;
-  border:3px solid #3b2f2f;
+  font-size:18px;
+  border-radius:10px;
+  border:2px solid #4caf50;
+}
+
+#result{
+  font-size:22px;
+  text-align:center;
+  margin-top:10px;
+}
+
+#score{
+  text-align:center;
+  font-size:18px;
+  color:#1b5e20;
 }
 </style>
 </head>
 
 <body>
 
-<div class="game">
-  <div class="header">
-    <div>🌾 Granja Pixel</div>
-    <div>⭐ <span id="score">0</span></div>
-  </div>
+<div id="game">
+  <h1>🌈 Mundo Pixel de Ortografía 🌈</h1>
 
-  <div class="scene" id="scene">👩‍🌾 🐔 🏡 🌳</div>
+  <div id="scene"></div>
+  <div id="options"></div>
+  <div id="result"></div>
 
-  <div class="box">
-    <div class="question" id="question"></div>
-    <div id="answers"></div>
-    <div class="msg" id="msg"></div>
-  </div>
+  <p id="score">⭐ Puntos: <span id="points">0</span></p>
 </div>
 
 <script>
-const scenes=[
-"👩‍🌾 🐔 🏡 🌳","🧑‍🌾 🐄 🌾 🌻","👩‍🌾 🐑 🌲 🪵","🧑‍🌾 🐓 🌿 🏠"
+let points = 0;
+
+const palabras = [
+"Casa","Perro","Gato","Mesa","Silla","Libro","Escuela","Niño","Niña","Amigo","Juego",
+"Pelota","Flor","Árbol","Sol","Luna","Nube","Agua","Pan","Leche","Zapato","Camisa",
+"Feliz","Triste","Grande","Pequeño","Rápido","Lento","Verde","Azul","Rojo","Amarillo",
+"Blanco","Negro","Correr","Saltar","Comer","Beber","Vivir","Jugar","Huevo","Hielo",
+"Hojas","Barco","Vaca","Burro","Ventana","Bicicleta","Cebra","Jardín","Girasol",
+"Jirafa","Gorra","Gigante","Sapo","Serpiente","Zorro","Cielo","Llave","Lluvia","Yoyo",
+"Playa","Calle","Pollo","Caballo","Botella","Vasija","Dulce","Chocolate","Helado",
+"Ratón","Elefante","Mono","Tigre","León","Pájaro","Pez","Mar","Río","Montaña","Campo",
+"Ciudad","Familia","Mamá","Papá","Hermano","Hermana","Abuela","Abuelo","Sonrisa",
+"Corazón","Sueño","Historia","Tarea","Cuaderno","Lápiz","Colores","Música"
 ];
 
-const exercises=[
-  {type:"choice",q:"¿Cuál palabra está bien escrita?",o:["Árbol","Arbol","Arbòl"],a:"Árbol"},
-  {type:"choice",q:"Elige la correcta:",o:["Caminó","Camino","Caminóo"],a:"Caminó"},
-  {type:"choice",q:"¿Dónde está bien la coma?",o:["Juan fue al campo y sembró maíz","Juan fue al campo, y sembró maíz","Juan, fue al campo y sembró maíz"],a:"Juan fue al campo, y sembró maíz"},
-  {type:"fill",q:"Completa la palabra: El ca__allo corre",a:"caballo"},
-  {type:"fill",q:"Completa: La gallina puso un h__",a:"huevo"},
-  {type:"choice",q:"Selecciona la oración correcta:",o:[
-    "María, Juan y Pedro sembraron papas",
-    "María Juan y Pedro, sembraron papas",
-    "María Juan, y Pedro sembraron papas"
-  ],a:"María, Juan y Pedro sembraron papas"},
-  {type:"choice",q:"¿Cuál está bien escrita?",o:["Había","Abía","Avía"],a:"Había"},
-  {type:"fill",q:"Completa: El a__ua del río es clara",a:"agua"},
-  {type:"choice",q:"¿Dónde va la tilde?",o:["El arbol crecio rapido","El árbol creció rápido","El arbol creció rapido"],a:"El árbol creció rápido"},
-  {type:"choice",q:"Elige la correcta:",o:["Sembrar","Senbrar","Cembrar"],a:"Sembrar"},
-  {type:"fill",q:"Completa: La co__echa fue abundante",a:"cosecha"},
-  {type:"choice",q:"¿Cuál es correcta?",o:["Vaca","Baca","Bhaca"],a:"Vaca"},
-  {type:"choice",q:"Selecciona la oración correcta:",o:[
-    "Después de llover, la tierra quedó húmeda",
-    "Después de llover la tierra, quedó húmeda",
-    "Después, de llover la tierra quedó húmeda"
-  ],a:"Después de llover, la tierra quedó húmeda"}
+const oraciones = [
+"¡Qué bonito está el día!","¿Dónde está mi cuaderno?","María, trae tu mochila.",
+"El perro come, juega y duerme.","¿Cómo te llamas?","¡Qué rico está el helado!",
+"Juan, Pedro y Ana fueron al parque.","¿Por qué la luna brilla tanto?",
+"¡Cuidado, el piso está mojado!","Mamá, ¿ya llegamos?",
+"El niño corrió rápido, pero se cansó.","¡Qué alto es ese árbol!",
+"¿Te gusta leer cuentos?","La abuela cocina arroz, sopa y pollo.",
+"¡Qué sorpresa tan grande!","¿Dónde dejé mis zapatos?",
+"El gato negro, muy curioso, miraba la ventana.","¡Vamos, es hora de salir!",
+"¿Quién trajo el balón?","Mi papá trabaja temprano, todos los días.",
+"¡Qué frío hace hoy!","Ana, ¿puedes ayudarme?",
+"El sol, la luna y las estrellas brillan.","¿Cuántos lápices tienes?",
+"¡Feliz cumpleaños, amigo!","El niño estudió mucho, por eso ganó.",
+"¿Qué día es hoy?","¡Qué linda está tu casa!",
+"La maestra explicó la tarea, con mucha paciencia.",
+"¿Dónde viven tus abuelos?","¡Apúrate, vamos tarde!",
+"El perro ladró fuerte, y todos se asustaron.",
+"¿Te duele la cabeza?","¡Qué rápido pasa el tiempo!",
+"Mamá compró pan, leche y frutas.","¿Quieres jugar conmigo?",
+"¡Qué alegría verte!","El pájaro cantó, y el niño sonrió.",
+"¿Por qué estás tan feliz?","¡Qué bonito canta ese niño!",
+"El tren llegó tarde, otra vez.","¿Dónde aprendiste eso?",
+"¡Ay, me equivoqué!","La niña pintó flores, casas y árboles.",
+"¿Te gustó el cuento?","¡Qué emoción tan grande!",
+"El profesor habló claro, y todos entendieron.",
+"¿Qué vas a hacer mañana?","¡Excelente trabajo, clase!"
 ];
 
-let score=0;
-const qEl=document.getElementById("question");
-const aEl=document.getElementById("answers");
-const msg=document.getElementById("msg");
-const scoreEl=document.getElementById("score");
-const scene=document.getElementById("scene");
+function cargarActividad(){
+  document.getElementById("options").innerHTML="";
+  document.getElementById("result").innerHTML="";
+  const tipo = Math.floor(Math.random()*3);
+  const scene = document.getElementById("scene");
 
-function newExercise(){
-  aEl.innerHTML="";
-  msg.textContent="";
-  scene.textContent=scenes[Math.floor(Math.random()*scenes.length)];
-  const ex=exercises[Math.floor(Math.random()*exercises.length)];
-  qEl.textContent=ex.q;
-
-  if(ex.type==="choice"){
-    ex.o.sort(()=>Math.random()-0.5).forEach(opt=>{
-      const b=document.createElement("button");
-      b.textContent=opt;
-      b.onclick=()=>check(opt,ex.a);
-      aEl.appendChild(b);
-    });
-  }else{
-    const input=document.createElement("input");
-    input.placeholder="Escribe aquí";
-    const btn=document.createElement("button");
+  if(tipo===0){
+    const palabra = palabras[Math.floor(Math.random()*palabras.length)];
+    const incompleta = palabra.replace(/[aeiouáéíóú]/i,"_");
+    scene.innerHTML = "Completa la palabra:<br><b>"+incompleta+"</b>";
+    const input = document.createElement("input");
+    const btn = document.createElement("button");
     btn.textContent="Comprobar";
-    btn.onclick=()=>check(input.value.trim().toLowerCase(),ex.a);
-    aEl.appendChild(input);
-    aEl.appendChild(btn);
+    btn.onclick=()=> input.value.toLowerCase()===palabra.toLowerCase()?ganar():perder();
+    options.append(input,btn);
+  }
+
+  if(tipo===1){
+    const correcta = oraciones[Math.floor(Math.random()*oraciones.length)];
+    const mala = correcta.replace(/[,¿¡!áéíóú]/g,"");
+    scene.innerHTML="Elige la oración correcta:";
+    [correcta,mala].sort(()=>Math.random()-0.5).forEach(op=>{
+      const b=document.createElement("button");
+      b.textContent=op;
+      b.onclick=()=>op===correcta?ganar():perder();
+      options.appendChild(b);
+    });
+  }
+
+  if(tipo===2){
+    const ora = oraciones[Math.floor(Math.random()*oraciones.length)];
+    scene.innerHTML="Lee la oración:<br><b>"+ora+"</b>";
+    const btn=document.createElement("button");
+    btn.textContent="Continuar";
+    btn.onclick=ganar;
+    options.appendChild(btn);
   }
 }
 
-function check(r,c){
-  if(r===c){
-    msg.textContent="🌟 ¡Excelente! La granja crece";
-    score+=5;
-  }else{
-    msg.textContent="🌱 Inténtalo otra vez";
-  }
-  scoreEl.textContent=score;
-  setTimeout(newExercise,1200);
+function ganar(){
+  points++;
+  document.getElementById("points").textContent=points;
+  document.getElementById("result").innerHTML="✅ ¡Muy bien!";
+  setTimeout(cargarActividad,1200);
 }
 
-newExercise();
+function perder(){
+  document.getElementById("result").innerHTML="❌ Inténtalo otra vez";
+}
+
+cargarActividad();
 </script>
 
 </body>
