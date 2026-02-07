@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Juego de Ortografía</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #e3f2fd;
+      text-align: center;
+      padding: 30px;
+    }
+    h1 {
+      color: #1565c0;
+    }
+    .word {
+      font-size: 40px;
+      margin: 20px;
+    }
+    button {
+      font-size: 18px;
+      margin: 10px;
+      padding: 10px 20px;
+      cursor: pointer;
+    }
+    #result {
+      font-size: 22px;
+      margin-top: 20px;
+    }
+    #score {
+      font-size: 20px;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>🎮 Juego de Ortografía</h1>
+  <p>Elige la letra correcta</p>
+
+  <div class="word" id="word"></div>
+
+  <div id="options"></div>
+
+  <div id="result"></div>
+  <div id="score">Puntaje: 0</div>
+
+  <script>
+    const words = [
+      { word: "c_sa", correct: "a", options: ["a", "e", "i"] },
+      { word: "per_o", correct: "r", options: ["l", "r", "n"] },
+      { word: "ga_o", correct: "t", options: ["t", "d", "c"] },
+      { word: "li_ro", correct: "b", options: ["v", "b", "p"] },
+      { word: "pa_to", correct: "j", options: ["g", "j", "h"] }
+    ];
+
+    let score = 0;
+    let current = 0;
+
+    function loadWord() {
+      document.getElementById("result").innerText = "";
+      document.getElementById("word").innerText = words[current].word;
+
+      const optionsDiv = document.getElementById("options");
+      optionsDiv.innerHTML = "";
+
+      words[current].options.forEach(letter => {
+        const button = document.createElement("button");
+        button.innerText = letter;
+        button.onclick = () => checkAnswer(letter);
+        optionsDiv.appendChild(button);
+      });
+    }
+
+    function checkAnswer(letter) {
+      if (letter === words[current].correct) {
+        document.getElementById("result").innerText = "✅ ¡Correcto!";
+        score++;
+      } else {
+        document.getElementById("result").innerText = "❌ Incorrecto";
+      }
+
+      document.getElementById("score").innerText = "Puntaje: " + score;
+
+      current++;
+      if (current < words.length) {
+        setTimeout(loadWord, 1000);
+      } else {
+        setTimeout(() => {
+          document.getElementById("word").innerText = "🎉 Juego terminado";
+          document.getElementById("options").innerHTML = "";
+        }, 1000);
+      }
+    }
+
+    loadWord();
+  </script>
+
+</body>
+</html>
